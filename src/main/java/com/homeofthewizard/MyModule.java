@@ -10,6 +10,6 @@ public class MyModule extends AbstractModule {
 
     @Override
     public void configure() {
-        bind(MyComponent.class).annotatedWith(Names.named("myComponent")).toInstance(new MyComponent());
+        bind(MyHelloer.class).toInstance(new MyFriend());
     }
 }
