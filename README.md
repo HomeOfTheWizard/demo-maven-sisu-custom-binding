@@ -4,7 +4,8 @@ A maven extension containing a [custom Guice module](https://eclipse-sisu.github
 
 # How to use it ?
 
-This guice module is packaged as a maven extension, so you should put its artifact name in the `.mvn/extension.xml` file of the maven application you want to use it.
+This guice module is packaged as a maven extension,  
+so in order to activate the extension you should put its artifact name in the `.mvn/extension.xml` file of the maven application you want to use it.
 example: 
 ```
 <extensions xmlns="http://maven.apache.org/EXTENSIONS/1.0.0"
@@ -17,3 +18,32 @@ example:
 	</extension>
 </extensions>
 ```
+
+Then you can easily use the objects coming from the custom binding. 
+example:
+```
+package com.homeofthewizard;
+
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+
+import javax.inject.Inject;
+
+@Mojo(name = "hello", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
+public class HelloMojo extends AbstractMojo {
+
+    private final MyHelloer helloer;
+
+    @Inject
+    public HelloMojo(MyHelloer helloer) {
+        this.helloer = helloer;
+    }
+
+    public void execute() {
+        helloer.hello();
+    }
+
+}
+```
+To see in more detail how to inject objects from guice-sisu into your plugins, see this [documentation](https://maven.apache.org/maven-jsr330.html)
